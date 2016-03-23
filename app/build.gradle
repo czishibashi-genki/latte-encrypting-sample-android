@@ -19,7 +19,14 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://github.com/cyber-z/public-fox-android-sdk/raw/master/mavenRepo"
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'co.jp.cyberz.fox:sdk-android:v2.15.7g'
 }

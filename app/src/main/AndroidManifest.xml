@@ -15,7 +15,27 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- URL スキームの設定 (sampleapp://) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="sampleapp" />
+            </intent-filter>
         </activity>
+
+        <!-- 必須: meta-data の設定 -->
+        <meta-data android:name="APPADFORCE_APP_ID" android:value="5163" />
+        <meta-data android:name="APPADFORCE_SERVER_URL" android:value="01c2039212f54cebb80526f880beaa11c1fee0f08bcb85e8cb084b8b9557754645" />
+        <meta-data android:name="APPADFORCE_CRYPTO_SALT" android:value="c984254886188bdeeb2396d561817f346ef932d5" />
+        <meta-data android:name="ANALYTICS_APP_KEY" android:value="2a75b4fb109d592e46161f97da5f0197609c71a3" />
     </application>
+    <!-- 必須: パーミッションの設定 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 推奨: パーミッションの設定 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

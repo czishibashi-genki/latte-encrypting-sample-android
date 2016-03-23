@@ -6,6 +6,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -20,6 +22,9 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import jp.appAdForce.android.AdManager;
+import jp.appAdForce.android.LtvManager;
+
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -29,28 +34,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String string = "test123";
-        String key = "6$J3&prVgGU8%~q1";
-        String iv = "PLeU#-!T28d-91fg";
+        Log.d(TAG, "onCreate");
 
-        // 暗号化
-        String stringEncrypted = encrypt(string, key, iv);
-        Log.d(TAG, stringEncrypted); // ttgiVU1WuN6+mR7+RcCY1w==
+        Button sendLtvBtn = (Button)findViewById(R.id.button);
+        sendLtvBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //　送信する
+                String mid = "test123";
+
+                // 暗号化
+                String midEncrypted = encrypt(mid);
+                Log.d(TAG, midEncrypted); // 出力された結果が「ttgiVU1WuN6+mR7+RcCY1w==」であることを確認
+
+                // Ltv成果としてmidを送信
+                AdManager ad = new AdManager(v.getContext());
+                LtvManager ltv = new LtvManager(ad);
+                ltv.addParam("mid", midEncrypted);
+                ltv.sendLtvConversion(7725);
+            }
+        });
     }
 
     /**
-     * Encodes a String in AES-128 with a given key
+     * AES128で暗号化、暗号化後Base64で変換した文字列を返す
      *
      * @return String Base64 and AES encoded String
      */
-    public static String encrypt(String string, String keyString, String ivString) throws NullPointerException {
-        if (keyString.length() == 0 || keyString == null) {
-            throw new NullPointerException("Please give key string");
-        }
+    public static String encrypt(String string) throws NullPointerException {
 
-        if (ivString.length() == 0 || ivString == null) {
-            throw new NullPointerException("Please give iv string");
-        }
+        // 暗号化用パラメータ
+        String keyString = "6$J3&prVgGU8%~q1";
+        String ivString = "PLeU#-!T28d-91fg";
 
         if (string.length() == 0 || string == null) {
             throw new NullPointerException("Please give text");
@@ -86,27 +102,5 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
